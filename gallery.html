@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gallery - NatureScapes</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <div class="nav-brand">
+        <i class="fas fa-leaf"></i>
+        <h1>NatureScapes</h1>
+      </div>
+      <button class="mobile-menu-toggle" id="mobileMenuToggle">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html" class="nav-link"><i class="fas fa-home"></i> Home</a></li>
+        <li><a href="gallery.html" class="nav-link active"><i class="fas fa-images"></i> Gallery</a></li>
+        <li><a href="upload.html" class="nav-link"><i class="fas fa-cloud-upload-alt"></i> Upload</a></li>
+        <li><a href="dashboard.html" class="nav-link"><i class="fas fa-chart-line"></i> Dashboard</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Gallery Header -->
+  <section class="gallery-header">
+    <h2>Explore Our Collection</h2>
+    <p>Discover beautiful nature photography from around the world</p>
+  </section>
+
+  <!-- Gallery Controls -->
+  <section class="gallery-controls">
+    <div class="search-bar">
+      <i class="fas fa-search"></i>
+      <input type="text" id="searchInput" placeholder="Search media by title..." />
+    </div>
+    <div class="filter-sort">
+      <select id="categoryFilter" class="filter-select">
+        <option value="">All Categories</option>
+      </select>
+      <select id="sortSelect" class="filter-select">
+        <option value="newest">Newest First</option>
+        <option value="oldest">Oldest First</option>
+        <option value="alphabetical">Alphabetical</option>
+      </select>
+      <button id="viewToggle" class="view-toggle" title="Toggle view">
+        <i class="fas fa-grip"></i>
+      </button>
+    </div>
+  </section>
+
+  <!-- Stats Bar -->
+  <section class="gallery-stats">
+    <div class="stat">
+      <i class="fas fa-images"></i>
+      <span>Total: <strong id="totalCount">0</strong></span>
+    </div>
+    <div class="stat">
+      <i class="fas fa-folder"></i>
+      <span>Categories: <strong id="categoryCountStat">0</strong></span>
+    </div>
+    <div class="stat">
+      <i class="fas fa-layer-group"></i>
+      <span>Displaying: <strong id="displayCount">0</strong></span>
+    </div>
+  </section>
+
+  <!-- Media Grid -->
+  <section class="featured">
+    <div id="loadingSpinner" class="loading-spinner hidden">
+      <div class="spinner"></div>
+      <p>Loading gallery...</p>
+    </div>
+    <div id="mediaGrid" class="media-grid"></div>
+    <div id="emptyState" class="empty-state hidden">
+      <i class="fas fa-inbox"></i>
+      <h3>No Media Found</h3>
+      <p id="emptyMessage">Try adjusting your search or filters</p>
+      <a href="upload.html" class="btn btn-primary">Upload First Media</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-bottom">
+      <p>&copy; 2024 NatureScapes Gallery. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+  <script>
+    let allMedia = [];
+
+    function loadGallery() {
+      const mediaGrid = document.getElementById('mediaGrid');
+      const loadingSpinner = document.getElementById('loadingSpinner');
+      const emptyState = document.getElementById('emptyState');
+
+      if (loadingSpinner) loadingSpinner.classList.remove('hidden');
+      if (mediaGrid) mediaGrid.innerHTML = '';
+
+      setTimeout(() => {
+        allMedia = JSON.parse(localStorage.getItem('mediaItems')) || [];
+        
+        if (loadingSpinner) loadingSpinner.classList.add('hidden');
+        
+        // Update stats
+        updateGalleryStats();
+        
+        // Populate category filter
+        populateCategoryFilter();
+        
+        // Initial render
+        filterAndDisplayMedia();
+      }, 300);
+    }
+
+    function updateGalleryStats() {
+      const totalCountEl = document.getElementById('totalCount');
+      const categoryCountStatEl = document.getElementById('categoryCountStat');
+      
+      if (totalCountEl) totalCountEl.textContent = allMedia.length;
+      
+      if (categoryCountStatEl) {
+        const categories = new Set(allMedia.map(item => item.category || 'Uncategorized'));
+        categoryCountStatEl.textContent = categories.size;
+      }
+    }
+
+    function populateCategoryFilter() {
+      const categoryFilter = document.getElementById('categoryFilter');
+      const categories = [...new Set(allMedia.map(item => item.category || 'Uncategorized'))];
+      
+      categories.forEach(cat => {
+        const option = document.createElement('option');
+        option.value = cat;
+        option.textContent = cat;
+        categoryFilter.appendChild(option);
+      });
+    }
+
+    function filterAndDisplayMedia() {
+      const searchInput = document.getElementById('searchInput');
+      const categoryFilter = document.getElementById('categoryFilter');
+      const sortSelect = document.getElementById('sortSelect');
+      const mediaGrid = document.getElementById('mediaGrid');
+      const emptyState = document.getElementById('emptyState');
+      const displayCountEl = document.getElementById('displayCount');
+
+      const searchTerm = searchInput.value.toLowerCase();
+      const selectedCategory = categoryFilter.value;
+      const sortBy = sortSelect.value;
+
+      let filtered = allMedia.filter(item => {
+        const matchesSearch = item.title.toLowerCase().includes(searchTerm);
+        const matchesCategory = !selectedCategory || item.category === selectedCategory;
+        return matchesSearch && matchesCategory;
+      });
+
+      // Sort
+      if (sortBy === 'oldest') {
+        filtered.sort((a, b) => parseInt(a.id) - parseInt(b.id));
+      } else if (sortBy === 'alphabetical') {
+        filtered.sort((a, b) => a.title.localeCompare(b.title));
+      } else {
+        filtered.sort((a, b) => parseInt(b.id) - parseInt(a.id));
+      }
+
+      // Display
+      if (filtered.length === 0) {
+        if (emptyState) {
+          emptyState.classList.remove('hidden');
+          document.getElementById('emptyMessage').textContent = 
+            searchTerm || selectedCategory 
+              ? 'No results found for your filters'
+              : 'No media uploaded yet';
+        }
+        if (mediaGrid) mediaGrid.innerHTML = '';
+        if (displayCountEl) displayCountEl.textContent = '0';
+      } else {
+        if (emptyState) emptyState.classList.add('hidden');
+        
+        const html = filtered.map((item, index) => `
+          <div class="media-card" style="animation-delay: ${index * 0.05}s">
+            <div class="media-card-image">
+              ${item.fileType?.startsWith('video/')
+                ? `<video controls style="width: 100%; height: 100%; object-fit: cover;">
+                     <source src="${item.fileUrl}" type="${item.fileType}">
+                   </video>`
+                : `<img src="${item.fileUrl}" alt="${item.title}" />`
+              }
+            </div>
+            <div class="media-card-content">
+              <h3>${item.title}</h3>
+              ${item.category ? `<span class="media-card-category">${item.category}</span>` : ''}
+              <p>${item.description || 'No description'}</p>
+              <div class="media-card-actions">
+                <button onclick="deleteMedia('${item.id}')">
+                  <i class="fas fa-trash"></i> Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        `).join('');
+        
+        if (mediaGrid) mediaGrid.innerHTML = html;
+        if (displayCountEl) displayCountEl.textContent = filtered.length;
+      }
+    }
+
+    // Event listeners
+    document.getElementById('searchInput').addEventListener('input', filterAndDisplayMedia);
+    document.getElementById('categoryFilter').addEventListener('change', filterAndDisplayMedia);
+    document.getElementById('sortSelect').addEventListener('change', filterAndDisplayMedia);
+
+    // Load gallery on page load
+    document.addEventListener('DOMContentLoaded', loadGallery);
+
+    // Listen for storage changes (updates from other tabs)
+    window.addEventListener('storage', loadGallery);
+  </script>
+</body>
+</html>

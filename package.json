@@ -1,0 +1,9 @@
+{
+  "name": "naturescapes-api",
+  "version": "1.0.0",
+  "dependencies": {
+    "@azure/storage-blob": "^12.26.0",
+    "@azure/cosmos": "^4.2.0",
+    "busboy": "^1.6.0"
+  }
+}

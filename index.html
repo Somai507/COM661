@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NatureScapes - Cloud-Native Multimedia Platform</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <div class="nav-brand">
+        <i class="fas fa-leaf"></i>
+        <h1>NatureScapes</h1>
+      </div>
+      <button class="mobile-menu-toggle" id="mobileMenuToggle">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html" class="nav-link active"><i class="fas fa-home"></i> Home</a></li>
+        <li><a href="gallery.html" class="nav-link"><i class="fas fa-images"></i> Gallery</a></li>
+        <li><a href="upload.html" class="nav-link"><i class="fas fa-cloud-upload-alt"></i> Upload</a></li>
+        <li><a href="dashboard.html" class="nav-link"><i class="fas fa-chart-line"></i> Dashboard</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <header class="hero">
+    <div class="hero-content">
+      <span class="hero-badge">✨ Cloud-Native Solution</span>
+      <h2 class="hero-title">Discover Nature's Beauty</h2>
+      <p class="hero-subtitle">Upload, manage and explore stunning nature photos and videos stored securely in Azure Cloud.</p>
+      <div class="hero-buttons">
+        <a href="gallery.html" class="btn btn-primary">
+          <i class="fas fa-search"></i> Explore Gallery
+        </a>
+        <a href="upload.html" class="btn btn-secondary">
+          <i class="fas fa-arrow-up"></i> Upload Media
+        </a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-item">
+          <span class="stat-number" id="mediaCount">0</span>
+          <span class="stat-label">Media Files</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number" id="categoryCount">0</span>
+          <span class="stat-label">Categories</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">∞</span>
+          <span class="stat-label">Cloud Storage</span>
+        </div>
+      </div>
+    </div>
+    <div class="hero-background">
+      <div class="blob blob-1"></div>
+      <div class="blob blob-2"></div>
+      <div class="blob blob-3"></div>
+    </div>
+  </header>
+
+  <!-- Features Section -->
+  <section class="features">
+    <div class="section-header">
+      <h2>Why Choose NatureScapes?</h2>
+      <p>Experience the perfect blend of cloud technology and nature photography</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon"><i class="fas fa-cloud"></i></div>
+        <h3>Cloud Storage</h3>
+        <p>Securely store unlimited nature media on Azure Cloud infrastructure</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon"><i class="fas fa-bolt"></i></div>
+        <h3>Lightning Fast</h3>
+        <p>Experience blazing-fast uploads and downloads with optimized performance</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon"><i class="fas fa-lock"></i></div>
+        <h3>Secure</h3>
+        <p>Your media is protected with enterprise-grade security measures</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon"><i class="fas fa-mobile-alt"></i></div>
+        <h3>Responsive</h3>
+        <p>Access your collection seamlessly on any device, anywhere, anytime</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Media Section -->
+  <section class="featured">
+    <div class="section-header">
+      <h2>Featured Nature Media</h2>
+      <p>Curated collection of stunning nature photography and videography</p>
+    </div>
+    <div id="loadingSpinner" class="loading-spinner hidden">
+      <div class="spinner"></div>
+      <p>Loading media...</p>
+    </div>
+    <div id="mediaGrid" class="media-grid"></div>
+    <div id="emptyState" class="empty-state hidden">
+      <i class="fas fa-image"></i>
+      <h3>No Media Found</h3>
+      <p>Start by uploading your first nature photo or video</p>
+      <a href="upload.html" class="btn btn-primary">Upload Now</a>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta-section">
+    <div class="cta-content">
+      <h2>Ready to Share Your Nature Photography?</h2>
+      <p>Join our community of nature enthusiasts and showcase your work</p>
+      <a href="upload.html" class="btn btn-large">
+        <i class="fas fa-camera"></i> Start Uploading
+      </a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>NatureScapes</h3>
+        <p>Cloud-native multimedia platform for nature photography</p>
+      </div>
+      <div class="footer-section">
+        <h3>Quick Links</h3>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="gallery.html">Gallery</a></li>
+          <li><a href="upload.html">Upload</a></li>
+          <li><a href="dashboard.html">Dashboard</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h3>Contact</h3>
+        <p>Email: info@naturescapes.com</p>
+        <p>Phone: +1 (555) 123-4567</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2024 NatureScapes. COM682 Coursework 2. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
